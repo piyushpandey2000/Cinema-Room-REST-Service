@@ -13,16 +13,12 @@ public class Seat {
     private int row;
     private int column;
 
-    @JsonIgnore
-    private boolean booked;
-
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int price;
 
     public Seat(int row, int col) {
         this.row = row;
         this.column = col;
-        this.booked = false;
         this.price = row>4 ? 8 : 10;
     }
 
