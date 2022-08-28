@@ -33,4 +33,25 @@ public class Cinema {
     public void newTicket(UUID token, Seat seat) {
         ticket.put(token.toString(), seat);
     }
+
+    @JsonIgnore
+    public int getNumberOfAvailableSeats() {
+        return available_seats.size();
+    }
+
+    @JsonIgnore
+    public int getNumberOfPurchasedTickets() {
+        return ticket.size();
+    }
+
+    @JsonIgnore
+    public int getCurrentIncome() {
+        int total = 0;
+
+        for(Map.Entry<String, Seat> e : ticket.entrySet()) {
+            total += e.getValue().getPrice();
+        }
+
+        return total;
+    }
 }

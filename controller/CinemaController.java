@@ -10,11 +10,13 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
 public class CinemaController {
 
+    private static final String PASSWORD = "super_secret";
     Cinema cinema = new Cinema(9, 9);
 
     @GetMapping("/seats")
@@ -62,5 +64,22 @@ public class CinemaController {
 
         response = new HashMap<>(Map.of("error", "Wrong token!"));
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/stats")
+    public ResponseEntity<?> stats(@RequestParam(required = false) String password) {
+        Map<String, Object> response;
+
+        if (password!=null && Objects.equals(password, PASSWORD))
+        {
+            response = new HashMap<>(Map.of("current_income", cinema.getCurrentIncome(),
+                    "number_of_available_seats", cinema.getNumberOfAvailableSeats(),
+                    "number_of_purchased_tickets", cinema.getNumberOfPurchasedTickets()));
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        response = new HashMap<>(Map.of("error", "The password is wrong!"));
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 }
